@@ -4,6 +4,17 @@ A small web app where staff can report IT issues, track their tickets and look u
 
 Built with **Python (Flask)**, **SQLite**, **HTML** and **CSS**.
 
+## Screenshots
+
+**Admin dashboard**
+![Admin dashboard](screenshots/dashboard.png)
+
+**Ticket page – IT replies and resolves the issue**
+![Ticket page](screenshots/ticket.png)
+
+**Solutions to common problems**
+![Solutions page](screenshots/solutions.png)
+
 ## Features
 
 - **Register / log in / log out**
@@ -17,7 +28,7 @@ Built with **Python (Flask)**, **SQLite**, **HTML** and **CSS**.
 
 | Risk | How it's handled |
 |---|---|
-| Stolen passwords | Passwords are hashed with Werkzeug (`generate_password_hash`), never stored as plain text |
+| Stolen passwords | Passwords are hashed with PBKDF2-SHA256 using Werkzeug (`generate_password_hash`), never stored as plain text |
 | SQL injection | Every query uses `?` placeholders instead of joining strings together |
 | Cross-site scripting (XSS) | Jinja templates escape user input automatically |
 | Cross-site request forgery (CSRF) | Every form sends a secret token that is checked on each POST request |

@@ -54,7 +54,7 @@ def init_db():
     if db.execute("SELECT id FROM users WHERE username = 'admin'").fetchone() is None:
         db.execute(
             "INSERT INTO users (username, password_hash, role) VALUES (?, ?, 'admin')",
-            ("admin", generate_password_hash(admin_password)),
+            ("admin", generate_password_hash(admin_password, method="pbkdf2:sha256")),
         )
 
     # Add a few starter FAQs if the table is empty
@@ -134,7 +134,7 @@ def register():
             try:
                 db.execute(
                     "INSERT INTO users (username, password_hash, role) VALUES (?, ?, 'user')",
-                    (username, generate_password_hash(password)),
+                    (username, generate_password_hash(password, method="pbkdf2:sha256")),
                 )
                 db.commit()
                 flash("Account created. You can now log in.")

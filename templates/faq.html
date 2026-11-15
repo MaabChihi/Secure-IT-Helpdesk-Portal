@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Solutions to common problems</h1>
+
+{% for f in faqs %}
+<div class="card">
+    <h3>{{ f.question }}</h3>
+    <p>{{ f.answer }}</p>
+    {% if session.role == 'admin' %}
+    <form method="post" action="{{ url_for('delete_faq', faq_id=f.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="danger">Delete</button>
+    </form>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% if session.role == 'admin' %}
+<div class="card">
+    <h2>Add a solution</h2>
+    <form method="post" action="{{ url_for('add_faq') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Problem <input type="text" name="question" required></label>
+        <label>Solution <textarea name="answer" rows="3" required></textarea></label>
+        <button type="submit">Add</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

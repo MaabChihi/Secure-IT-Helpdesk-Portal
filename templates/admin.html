@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<div class="stats">
+    {% for status in statuses %}
+    <a class="stat" href="{{ url_for('admin_dashboard', status=status) }}">
+        <span class="number">{{ counts[status] }}</span>{{ status }}
+    </a>
+    {% endfor %}
+    <div class="stat"><span class="number">{{ user_count }}</span>Users</div>
+</div>
+
+<h2>{{ status_filter or 'All' }} tickets
+    {% if status_filter %}<small><a href="{{ url_for('admin_dashboard') }}">show all</a></small>{% endif %}
+</h2>
+
+<table>
+    <tr><th>#</th><th>Title</th><th>User</th><th>Category</th><th>Priority</th><th>Status</th><th>Created</th></tr>
+    {% for t in tickets %}
+    <tr>
+        <td>{{ t.id }}</td>
+        <td><a href="{{ url_for('view_ticket', ticket_id=t.id) }}">{{ t.title }}</a></td>
+        <td>{{ t.username }}</td>
+        <td>{{ t.category }}</td>
+        <td class="{{ 'high' if t.priority == 'High' }}">{{ t.priority }}</td>
+        <td><span class="status {{ t.status|lower|replace(' ', '-') }}">{{ t.status }}</span></td>
+        <td>{{ t.created_at }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7">No tickets.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Helpdesk Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}" class="logo">IT Helpdesk</a>
+        <div>
+            <a href="{{ url_for('faq') }}">Solutions</a>
+            {% if session.user_id %}
+                {% if session.role == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                {% else %}
+                    <a href="{{ url_for('my_tickets') }}">My Tickets</a>
+                    <a href="{{ url_for('new_ticket') }}">New Ticket</a>
+                {% endif %}
+                <span class="user">{{ session.username }} ({{ session.role }})</span>
+                <a href="{{ url_for('logout') }}">Log out</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Log in</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% for message in get_flashed_messages() %}
+            <p class="flash">{{ message }}</p>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

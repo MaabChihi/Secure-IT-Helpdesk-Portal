@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1>#{{ ticket.id }} – {{ ticket.title }}</h1>
+    <p>
+        <span class="status {{ ticket.status|lower|replace(' ', '-') }}">{{ ticket.status }}</span>
+        {{ ticket.category }} · {{ ticket.priority }} priority · raised by {{ ticket.username }} on {{ ticket.created_at }}
+    </p>
+    <p class="description">{{ ticket.description }}</p>
+</div>
+
+<h2>Updates</h2>
+{% for c in comments %}
+    <div class="comment {{ 'staff' if c.role == 'admin' }}">
+        <strong>{{ c.username }}{% if c.role == 'admin' %} (IT Support){% endif %}</strong>
+        <small>{{ c.created_at }}</small>
+        <p>{{ c.message }}</p>
+    </div>
+{% else %}
+    <p>No updates yet.</p>
+{% endfor %}
+
+<div class="card">
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Add a reply <textarea name="message" rows="3"></textarea></label>
+        {% if session.role == 'admin' %}
+        <label>Status
+            <select name="status">
+                {% for s in statuses %}
+                <option {% if s == ticket.status %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        {% endif %}
+        <button type="submit">Update</button>
+    </form>
+</div>
+{% endblock %}
